@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   statistic: { display: "flex", alignItems: "center" },
 });
 
-const getNumberString = number => {
+const getNumberString = (number) => {
   if (number < 1000) {
     return `${number}`;
   }
@@ -20,10 +20,12 @@ const getNumberString = number => {
   return `${Math.round(number / 100) / 10}k`;
 };
 
-const StatisticDisplay = ({ number, label }) => {
+const StatisticDisplay = ({ number, label, testID }) => {
   return (
     <View style={styles.statistic}>
-      <Text fontWeight="bold">{getNumberString(number)}</Text>
+      <Text fontWeight="bold" testID={testID}>
+        {getNumberString(number)}
+      </Text>
       <Text>{label}</Text>
     </View>
   );
@@ -32,10 +34,26 @@ const StatisticDisplay = ({ number, label }) => {
 const StatisticsDisplay = ({ stars, forks, reviews, rating }) => {
   return (
     <View style={styles.container}>
-      <StatisticDisplay number={stars} label="Stars" />
-      <StatisticDisplay number={forks} label="Forks" />
-      <StatisticDisplay number={reviews} label="Reviews" />
-      <StatisticDisplay number={rating} label="Rating" />
+      <StatisticDisplay
+        number={stars}
+        label="Stars"
+        testID="repository-stars"
+      />
+      <StatisticDisplay
+        number={forks}
+        label="Forks"
+        testID="repository-forks"
+      />
+      <StatisticDisplay
+        number={reviews}
+        label="Reviews"
+        testID="repository-reviews"
+      />
+      <StatisticDisplay
+        number={rating}
+        label="Rating"
+        testID="repository-rating"
+      />
     </View>
   );
 };

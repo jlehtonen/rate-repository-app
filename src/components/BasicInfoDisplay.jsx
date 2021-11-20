@@ -25,13 +25,19 @@ const styles = StyleSheet.create({
 const BasicInfoDisplay = ({ fullName, description, language }) => {
   return (
     <View style={styles.container}>
-      <Text fontWeight="bold" fontSize="subheading">
+      <Text fontWeight="bold" fontSize="subheading" testID="repository-name">
         {fullName}
       </Text>
-      <Text color="textSecondary" style={styles.description}>
+      <Text
+        color="textSecondary"
+        style={styles.description}
+        testID="repository-description"
+      >
         {description}
       </Text>
-      <Text style={styles.language}>{language}</Text>
+      <Text style={styles.language} testID="repository-language">
+        {language}
+      </Text>
     </View>
   );
 };
