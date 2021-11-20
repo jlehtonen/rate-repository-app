@@ -7,14 +7,14 @@ const useRepository = (id) => {
     variables: { id },
   });
 
-  if (!data) {
+  if (!data || !data.repository) {
     return { repository: null, reviews: null, loading };
   }
 
   const { reviews, ...repository } = data.repository;
   return {
     repository: repository,
-    reviews: reviews.edges.map((edge) => edge.node),
+    reviews: reviews ? reviews.edges.map((edge) => edge.node) : [],
     loading,
   };
 };

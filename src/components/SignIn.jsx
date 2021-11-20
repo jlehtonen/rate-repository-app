@@ -74,17 +74,6 @@ const SignIn = () => {
   };
 
   return <SignInContainer onSubmit={onSubmit} />;
-  // return (
-  //   <View style={styles.formContainer}>
-  //     <Formik
-  //       initialValues={initialValues}
-  //       onSubmit={onSubmit}
-  //       validationSchema={validationSchema}
-  //     >
-  //       {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
-  //     </Formik>
-  //   </View>
-  // );
 };
 
 export default SignIn;

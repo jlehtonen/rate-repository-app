@@ -5,6 +5,7 @@ import AppBar from "./AppBar";
 import { Route, Routes } from "react-router-native";
 import SignIn from "./SignIn";
 import Repository from "./Repository";
+import Review from "./Review";
 
 const Main = () => {
   return (
@@ -14,6 +15,7 @@ const Main = () => {
         <Route path="/" exact element={<RepositoryList />} />
         <Route path="/sign-in" exact element={<SignIn />} />
         <Route path="/repositories/:id" exact element={<Repository />} />
+        <Route path="/review" exact element={<Review />} />
       </Routes>
     </View>
   );
