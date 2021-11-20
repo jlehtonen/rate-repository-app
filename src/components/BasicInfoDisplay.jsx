@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     display: "flex",
     alignItems: "flex-start",
+    maxWidth: 275,
   },
   description: {
     marginTop: 5,

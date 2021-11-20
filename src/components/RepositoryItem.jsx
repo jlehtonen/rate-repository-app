@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 15,
     display: "flex",
+    marginBottom: 10,
   },
   avatarAndInfoContainer: { display: "flex", flexDirection: "row" },
 });
