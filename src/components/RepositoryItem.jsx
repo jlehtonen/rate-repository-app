@@ -1,8 +1,10 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import * as WebBrowser from "expo-web-browser";
 import Avatar from "./Avatar";
 import BasicInfoDisplay from "./BasicInfoDisplay";
 import StatisticsDisplay from "./StatisticsDisplay";
+import Button from "./Button";
 
 const styles = StyleSheet.create({
   container: {
@@ -13,7 +15,15 @@ const styles = StyleSheet.create({
   avatarAndInfoContainer: { display: "flex", flexDirection: "row" },
 });
 
-const RepositoryItem = ({ item }) => {
+const GitHubLink = ({ url }) => {
+  const handlePress = () => {
+    WebBrowser.openBrowserAsync(url);
+  };
+
+  return <Button label="Open in GitHub" onPress={handlePress} />;
+};
+
+const RepositoryItem = ({ item, showGitHubLink }) => {
   return (
     <View style={styles.container}>
       <View style={styles.avatarAndInfoContainer}>
@@ -31,6 +41,7 @@ const RepositoryItem = ({ item }) => {
         reviews={item.reviewCount}
         rating={item.ratingAverage}
       />
+      {showGitHubLink ? <GitHubLink url={item.url} /> : null}
     </View>
   );
 };
