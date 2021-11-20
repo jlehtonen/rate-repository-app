@@ -36,9 +36,18 @@ const initialValues = {
 const SignInForm = ({ onSubmit }) => {
   return (
     <View>
-      <FormikTextInput name="username" placeholder="Username" />
-      <FormikTextInput name="password" placeholder="Password" secureTextEntry />
-      <Pressable onPress={onSubmit}>
+      <FormikTextInput
+        name="username"
+        placeholder="Username"
+        testID="sign-in-username"
+      />
+      <FormikTextInput
+        name="password"
+        placeholder="Password"
+        secureTextEntry
+        testID="sign-in-password"
+      />
+      <Pressable onPress={onSubmit} testID="sign-in-button">
         <View style={styles.button}>
           <Text fontWeight="bold" style={styles.buttonText}>
             Sign in
@@ -53,6 +62,20 @@ const validationSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
   password: yup.string().required("Password is required"),
 });
+
+export const SignInContainer = ({ onSubmit }) => {
+  return (
+    <View style={styles.formContainer}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        validationSchema={validationSchema}
+      >
+        {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
+      </Formik>
+    </View>
+  );
+};
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -70,17 +93,18 @@ const SignIn = () => {
     }
   };
 
-  return (
-    <View style={styles.formContainer}>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        validationSchema={validationSchema}
-      >
-        {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
-      </Formik>
-    </View>
-  );
+  return <SignInContainer onSubmit={onSubmit} />;
+  // return (
+  //   <View style={styles.formContainer}>
+  //     <Formik
+  //       initialValues={initialValues}
+  //       onSubmit={onSubmit}
+  //       validationSchema={validationSchema}
+  //     >
+  //       {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
+  //     </Formik>
+  //   </View>
+  // );
 };
 
 export default SignIn;
