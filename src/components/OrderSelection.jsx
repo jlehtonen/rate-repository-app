@@ -3,13 +3,6 @@ import { View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
 const OrderSelection = ({ selectedOrder, handleChange }) => {
-  // const [selectedOrder, setSelectedOrder] = useState();
-
-  // const handleChange = (value) => {
-  //   console.log(value);
-  //   setSelectedOrder(value);
-  // };
-
   return (
     <View style={{ paddingHorizontal: 10, paddingVertical: 20 }}>
       <Picker selectedValue={selectedOrder} onValueChange={handleChange}>
