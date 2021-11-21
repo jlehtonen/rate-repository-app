@@ -74,11 +74,15 @@ const ReviewItem = ({ review }) => {
 
 const Repository = () => {
   const { id } = useParams();
-  const { repository, reviews, loading } = useRepository(id);
+  const { repository, reviews, loading, fetchMore } = useRepository(id, 4);
 
   if (loading) {
     return null;
   }
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   return (
     <FlatList
@@ -90,6 +94,8 @@ const Repository = () => {
       )}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       style={styles.list}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.1}
     />
   );
 };

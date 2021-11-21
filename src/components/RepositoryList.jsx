@@ -53,6 +53,8 @@ export class RepositoryListContainer extends React.Component {
           <RepositoryListItem item={item} navigate={this.props.navigate} />
         )}
         ListHeaderComponent={this.renderHeader}
+        onEndReached={this.props.onEndReach}
+        onEndReachedThreshold={0.5}
         style={styles.container}
       />
     );
@@ -82,13 +84,18 @@ const RepositoryList = () => {
   const [selectedOrder, setSelectedOrder] = useState("CREATED_AT DESC");
   const [filter, setFilter] = useState("");
   const [debouncedFilter] = useDebounce(filter, 500);
-  const { repositories } = useRepositories(
+  const { repositories, fetchMore } = useRepositories(
     ...selectedOrder.split(" "),
-    debouncedFilter
+    debouncedFilter,
+    5
   );
 
   const handleOrderChange = (value) => {
     setSelectedOrder(value);
+  };
+
+  const onEndReach = () => {
+    fetchMore();
   };
 
   return (
@@ -99,6 +106,7 @@ const RepositoryList = () => {
       handleFilterChange={(text) => setFilter(text)}
       order={selectedOrder}
       handleOrderChange={handleOrderChange}
+      onEndReach={onEndReach}
     />
   );
 };
