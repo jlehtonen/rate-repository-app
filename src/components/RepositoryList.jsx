@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { FlatList, StyleSheet, Pressable } from "react-native";
 import RepositoryItem from "./RepositoryItem";
 import theme from "../theme";
 import useRepositories from "../hooks/useRepositories";
 import { useNavigate } from "react-router-native";
+import OrderSelection from "./OrderSelection";
 
 const styles = StyleSheet.create({
   container: {
@@ -23,7 +24,7 @@ const RepositoryListItem = ({ item, navigate }) => {
   );
 };
 
-export const RepositoryListContainer = ({ repositories, navigate }) => {
+export const RepositoryListContainer = ({ repositories, navigate, header }) => {
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
     : [];
@@ -34,6 +35,7 @@ export const RepositoryListContainer = ({ repositories, navigate }) => {
       renderItem={({ item }) => (
         <RepositoryListItem item={item} navigate={navigate} />
       )}
+      ListHeaderComponent={header}
       style={styles.container}
     />
   );
@@ -41,9 +43,24 @@ export const RepositoryListContainer = ({ repositories, navigate }) => {
 
 const RepositoryList = () => {
   const navigate = useNavigate();
-  const { repositories } = useRepositories();
+  const [selectedOrder, setSelectedOrder] = useState("CREATED_AT DESC");
+  const { repositories } = useRepositories(...selectedOrder.split(" "));
+
+  const handleOrderChange = (value) => {
+    setSelectedOrder(value);
+  };
+
   return (
-    <RepositoryListContainer repositories={repositories} navigate={navigate} />
+    <RepositoryListContainer
+      repositories={repositories}
+      navigate={navigate}
+      header={() => (
+        <OrderSelection
+          selectedOrder={selectedOrder}
+          handleChange={handleOrderChange}
+        />
+      )}
+    />
   );
 };
 
