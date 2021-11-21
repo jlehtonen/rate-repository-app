@@ -5,6 +5,8 @@ import theme from "../theme";
 import useRepositories from "../hooks/useRepositories";
 import { useNavigate } from "react-router-native";
 import OrderSelection from "./OrderSelection";
+import { useDebounce } from "use-debounce";
+import { Searchbar } from "react-native-paper";
 
 const styles = StyleSheet.create({
   container: {
@@ -24,27 +26,66 @@ const RepositoryListItem = ({ item, navigate }) => {
   );
 };
 
-export const RepositoryListContainer = ({ repositories, navigate, header }) => {
-  const repositoryNodes = repositories
-    ? repositories.edges.map((edge) => edge.node)
-    : [];
+export class RepositoryListContainer extends React.Component {
+  renderHeader = () => {
+    const props = this.props;
+    return (
+      <RepositoryListHeader
+        filter={props.filter}
+        handleFilterChange={props.handleFilterChange}
+        order={props.selectedOrder}
+        handleOrderChange={props.handleOrderChange}
+      />
+    );
+  };
 
+  repositoryNodes() {
+    return this.props.repositories
+      ? this.props.repositories.edges.map((edge) => edge.node)
+      : [];
+  }
+
+  render() {
+    return (
+      <FlatList
+        data={this.repositoryNodes()}
+        renderItem={({ item }) => (
+          <RepositoryListItem item={item} navigate={this.props.navigate} />
+        )}
+        ListHeaderComponent={this.renderHeader}
+        style={styles.container}
+      />
+    );
+  }
+}
+
+const RepositoryListHeader = ({
+  filter,
+  handleFilterChange,
+  order,
+  handleOrderChange,
+}) => {
   return (
-    <FlatList
-      data={repositoryNodes}
-      renderItem={({ item }) => (
-        <RepositoryListItem item={item} navigate={navigate} />
-      )}
-      ListHeaderComponent={header}
-      style={styles.container}
-    />
+    <>
+      <Searchbar
+        placeholder="Search"
+        value={filter}
+        onChangeText={handleFilterChange}
+      />
+      <OrderSelection selectedOrder={order} handleChange={handleOrderChange} />
+    </>
   );
 };
 
 const RepositoryList = () => {
   const navigate = useNavigate();
   const [selectedOrder, setSelectedOrder] = useState("CREATED_AT DESC");
-  const { repositories } = useRepositories(...selectedOrder.split(" "));
+  const [filter, setFilter] = useState("");
+  const [debouncedFilter] = useDebounce(filter, 500);
+  const { repositories } = useRepositories(
+    ...selectedOrder.split(" "),
+    debouncedFilter
+  );
 
   const handleOrderChange = (value) => {
     setSelectedOrder(value);
@@ -54,12 +95,10 @@ const RepositoryList = () => {
     <RepositoryListContainer
       repositories={repositories}
       navigate={navigate}
-      header={() => (
-        <OrderSelection
-          selectedOrder={selectedOrder}
-          handleChange={handleOrderChange}
-        />
-      )}
+      filter={filter}
+      handleFilterChange={(text) => setFilter(text)}
+      order={selectedOrder}
+      handleOrderChange={handleOrderChange}
     />
   );
 };
